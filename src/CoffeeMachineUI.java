@@ -11,6 +11,7 @@ public class CoffeeMachineUI {
     public CoffeeMachineUI(CoffeeMachine coffeeMachine) {
         this.coffeeMachine = coffeeMachine;
         this.scanner = new Scanner(System.in);
+        // todo git testing
     }
 
     public void start() {
