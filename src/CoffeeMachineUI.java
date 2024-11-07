@@ -4,14 +4,13 @@ public class CoffeeMachineUI {
     private final CoffeeMachine coffeeMachine;
     private final Scanner scanner;
 
-    // Admin credentials
+
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin123";
 
     public CoffeeMachineUI(CoffeeMachine coffeeMachine) {
         this.coffeeMachine = coffeeMachine;
         this.scanner = new Scanner(System.in);
-        // todo git testing
     }
 
     public void start() {
@@ -32,10 +31,14 @@ public class CoffeeMachineUI {
     }
 
     private void handleLogin() {
-        System.out.print("Enter:login\nEnter username:\n");
+        System.out.print("Enter: login\nEnter username:\n");
         String username = scanner.next();
         System.out.print("Enter password:\n");
         String password = scanner.next();
+        System.out.println("Welcome, " + username + "!");
+        System.out.println();
+
+
 
         if (ADMIN_USERNAME.equals(username) && ADMIN_PASSWORD.equals(password)) {
             handleAdminActions();
@@ -79,7 +82,7 @@ public class CoffeeMachineUI {
     }
 
     private void handleBuy() {
-        System.out.print("Enter:buy\nWhat do you want to buy?\n1- Espresso\n2- Latte\n3- Capuccino\n");
+        System.out.print("Enter: buy\nWhat do you want to buy?\n1- Espresso\n2- Latte\n3- Capuccino\n");
         String choice = scanner.next();
 
         CoffeeCupType espresso = new CoffeeCupType(250, 0, 16, 4, "Espresso");

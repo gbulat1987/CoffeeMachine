@@ -1,6 +1,7 @@
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class CoffeeMachine {
@@ -9,51 +10,45 @@ public class CoffeeMachine {
     private int beans;
     private int cups;
     private int money;
-    private List<CoffeeCupType> coffeeTypes; // List to store coffee types
 
-    private static final String DIRECTORY_PATH = "doc";
-    private static final String FILENAME = DIRECTORY_PATH + "/coffee_machine_status.txt";
+    private static final String FILENAME = "doc/coffee_machine_status.txt";
 
     public CoffeeMachine() {
-        coffeeTypes = new ArrayList<>();
-        loadStateFromFile(FILENAME); // Load saved state on startup
+        loadStateFromFile(FILENAME);
+        // Initialize default values if the file doesn't exist or is invalid
+        if (water == 0 && milk == 0 && beans == 0 && cups == 0 && money == 0) {
+            initializeDefaultValues();
+        }
     }
 
-    // Load machine state from file
-    public void loadStateFromFile(String filename) {
+    void loadStateFromFile(String filename) {
         File file = new File(filename);
         if (!file.exists()) {
-            // No file found, use default values and add default coffee types
-            initializeDefaultValues();
-            return;
+            return; // Skip loading if the file does not exist
         }
 
         try (Scanner scanner = new Scanner(file)) {
+            // Load machine status
             if (scanner.hasNextLine()) {
+
                 String[] status = scanner.nextLine().split("; ");
-                water = Integer.parseInt(status[0]);
-                milk = Integer.parseInt(status[1]);
-                beans = Integer.parseInt(status[2]);
-                cups = Integer.parseInt(status[3]);
-                money = Integer.parseInt(status[4]);
+                water = Integer.parseInt(status[0].split(": ")[1]);
+                milk = Integer.parseInt(status[1].split(": ")[1]);
+                beans = Integer.parseInt(status[2].split(": ")[1]);
+                cups = Integer.parseInt(status[3].split(": ")[1]);
+                money = Integer.parseInt(status[4].split(": ")[1]);
             }
 
-            // Read admin credentials (for demonstration purposes)
+            // Skip the next line (admin credentials)
             if (scanner.hasNextLine()) {
-                scanner.nextLine(); // Skip admin credentials
+                scanner.nextLine();
             }
 
-            // Load coffee types
-            coffeeTypes.clear();
-            while (scanner.hasNextLine()) {
-                String[] coffeeDetails = scanner.nextLine().split("; ");
-                String name = coffeeDetails[0];
-                int waterNeeded = Integer.parseInt(coffeeDetails[1]);
-                int milkNeeded = Integer.parseInt(coffeeDetails[2]);
-                int beansNeeded = Integer.parseInt(coffeeDetails[3]);
-                int cost = Integer.parseInt(coffeeDetails[4]);
-                coffeeTypes.add(new CoffeeCupType(waterNeeded, milkNeeded, beansNeeded, cost, name));
+            // Skip the coffee types part
+            if (scanner.hasNextLine()) {
+                scanner.nextLine(); // Skip coffee types
             }
+
         } catch (FileNotFoundException e) {
             System.out.println("Could not load coffee machine state from file.");
         } catch (NumberFormatException e) {
@@ -61,43 +56,32 @@ public class CoffeeMachine {
         }
     }
 
-    // Save machine state to file
     public void saveStateToFile(String filename) {
-        // Ensure the directory exists
-        File directory = new File(DIRECTORY_PATH);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-
         try (PrintWriter writer = new PrintWriter(new File(filename))) {
             // Save machine status
-            writer.println(water + "; " + milk + "; " + beans + "; " + cups + "; " + money);
-            writer.println("admin; admin12345"); // Save admin credentials
+            writer.println("water: " + water + "; milk: " + milk + "; beans: " + beans + "; cups: " + cups + "; money: " + money);
+            writer.println("Username: admin; Password: admin123");
+            writer.println();
+            // Skip the coffee types part
+            // Save coffee types directly
+            writer.println("Espresso, 250, 0, 16, 4");
+            writer.println("Latte, 350, 75, 20, 7");
+            writer.println("Cappuccino, 200, 100, 12, 6");
 
-            // Save coffee types in specified format
-            for (CoffeeCupType type : coffeeTypes) {
-                writer.println(type.getName() + "; " + type.getWaterNeeded() + "; " + type.getMilkNeeded() + "; " + type.getBeansNeeded() + "; " + type.getCost());
-            }
+            System.out.println("State saved successfully.");
         } catch (IOException e) {
             System.out.println("Could not save coffee machine state to file.");
         }
     }
 
     private void initializeDefaultValues() {
-        // Set default machine values
-        this.water = 400;
-        this.milk = 540;
-        this.beans = 120;
-        this.cups = 9;
-        this.money = 550;
-
-        // Add default coffee types
-        coffeeTypes.add(new CoffeeCupType(250, 0, 16, 4, "Espresso"));
-        coffeeTypes.add(new CoffeeCupType(350, 75, 20, 7, "Latte"));
-        coffeeTypes.add(new CoffeeCupType(200, 100, 12, 6, "Cappuccino"));
+        this.water = 700;
+        this.milk = 1390;
+        this.beans = 1080;
+        this.cups = 107;
+        this.money = 564;
     }
 
-    // Display machine state
     public void printState() {
         System.out.println("CoffeeMachine{ water=" + water + ", milk=" + milk + ", coffeeBeans=" + beans + ", cups=" + cups + ", money=" + money + "}");
     }
@@ -130,7 +114,7 @@ public class CoffeeMachine {
             cups--;
             money += type.getCost();
             System.out.println("I have enough resources, making you " + type.getName());
-            saveStateToFile(FILENAME);
+            saveStateToFile(FILENAME); // Save state after making coffee
         }
     }
 
@@ -139,16 +123,12 @@ public class CoffeeMachine {
         this.milk += milk;
         this.beans += beans;
         this.cups += cups;
-        saveStateToFile(FILENAME);
+        saveStateToFile(FILENAME); // Save state after filling
     }
 
     public void take() {
         System.out.println("I gave you $" + money);
         money = 0;
-        saveStateToFile(FILENAME);
-    }
-
-    public List<CoffeeCupType> getCoffeeTypes() {
-        return coffeeTypes;
+        saveStateToFile(FILENAME); // Save state after taking money
     }
 }
