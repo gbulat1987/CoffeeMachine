@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-
 public class CoffeeMachine {
     private int water;
     private int milk;
@@ -11,9 +10,8 @@ public class CoffeeMachine {
     private int cups;
     private int money;
 
-    private CoffeeCupType[] coffeeTypes; // Niz koji sadrži vrste kave
-    private int coffeeCount; // Broj trenutno pohranjenih vrsta kave
-
+    private CoffeeCupType[] coffeeTypes;
+    private int coffeeCount;
 
     public CoffeeMachine() {
         this.coffeeTypes = new CoffeeCupType[100];
@@ -23,7 +21,49 @@ public class CoffeeMachine {
 
     // Učitava stanje iz datoteke
     public void loadStateFromFile(String filename) {
+        try (Scanner scanner = new Scanner(new File(filename))) {
+            if (scanner.hasNextLine()) {
+                String[] resourceParts = scanner.nextLine().split("; ");
+                for (String part : resourceParts) {
+                    String[] keyValue = part.split(": ");
+                    String key = keyValue[0].trim();
+                    int value = Integer.parseInt(keyValue[1].trim());
 
+                    switch (key) {
+                        case "water": this.water = value; break;
+                        case "milk": this.milk = value; break;
+                        case "beans": this.beans = value; break;
+                        case "cups": this.cups = value; break;
+                        case "money": this.money = value; break;
+                    }
+                }
+            }
+
+            if (scanner.hasNextLine()) {
+                scanner.nextLine(); // Preskače liniju sa korisničkim imenom i lozinkom
+            }
+
+            coffeeCount = 0; // Resetuje broj kava
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] coffeeParts = line.split(",");
+                if (coffeeParts.length == 5) {
+                    String name = coffeeParts[0].trim();
+                    int waterNeeded = Integer.parseInt(coffeeParts[1].trim());
+                    int milkNeeded = Integer.parseInt(coffeeParts[2].trim());
+                    int beansNeeded = Integer.parseInt(coffeeParts[3].trim());
+                    int cost = Integer.parseInt(coffeeParts[4].trim());
+
+                    addCoffeeType(new CoffeeCupType(waterNeeded, milkNeeded, beansNeeded, cost, name));
+                }
+            }
+
+            System.out.println("State loaded successfully.");
+        } catch (IOException e) {
+            System.out.println("Could not load coffee machine state from file.");
+        } catch (NumberFormatException e) {
+            System.out.println("File format is incorrect.");
+        }
     }
 
     // Sprema trenutno stanje u datoteku

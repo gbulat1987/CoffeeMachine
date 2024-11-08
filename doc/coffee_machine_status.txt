@@ -4,3 +4,4 @@ username: admin; password: admin123
 Espresso,250,0,16,4
 Latte,350,75,20,7
 Cappuccino,200,100,12,6
+NewCoffee,101,23,123,4
