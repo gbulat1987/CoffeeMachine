@@ -14,7 +14,7 @@ public class CoffeeMachine {
     private CoffeeCupType[] coffeeTypes; // Niz koji sadrži vrste kave
     private int coffeeCount; // Broj trenutno pohranjenih vrsta kave
 
-    // Konstruktor koji inicijalizira s default vrijednostima
+
     public CoffeeMachine() {
         this.coffeeTypes = new CoffeeCupType[100];
         this.coffeeCount = 0;
@@ -44,7 +44,7 @@ public class CoffeeMachine {
         }
     }
 
-    // Postavlja početne vrijednosti stroja
+    // Postavlja početne vrijednosti sa default vrijednostima
     private void initializeDefaultValues() {
         this.water = 700;
         this.milk = 1390;
@@ -57,7 +57,7 @@ public class CoffeeMachine {
         addCoffeeType(new CoffeeCupType(200, 100, 12, 6, "Cappuccino"));
     }
 
-    // Vraća niza vrsta kave
+    // Vraca niz vrsta kave
     public CoffeeCupType[] getCoffeeTypes() {
         return coffeeTypes;
     }
