@@ -1,3 +1,4 @@
+
 public class CoffeeCupType {
     private final int waterNeeded;
     private final int milkNeeded;
@@ -5,6 +6,7 @@ public class CoffeeCupType {
     private final int cost;
     private final String name;
 
+    // Konstruktor koji inicijalizira sve vrijednosti
     public CoffeeCupType(int waterNeeded, int milkNeeded, int beansNeeded, int cost, String name) {
         this.waterNeeded = waterNeeded;
         this.milkNeeded = milkNeeded;
@@ -12,6 +14,7 @@ public class CoffeeCupType {
         this.cost = cost;
         this.name = name;
     }
+
 
     public int getWaterNeeded() {
         return waterNeeded;

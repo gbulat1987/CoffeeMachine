@@ -1,6 +1,7 @@
-water: 400; milk: 1090; beans: 1056; cups: 110; money: 35
-Username: admin; Password: admin123
+water: 900; milk: 1215; beans: 1045; cups: 105; money: 5
+username: admin; password: admin123
 
-Espresso, 250, 0, 16, 4
-Latte, 350, 75, 20, 7
-Cappuccino, 200, 100, 12, 6
+Espresso,250,0,16,4
+Latte,350,75,20,7
+Cappuccino,200,100,12,6
+Mocha,100,100,15,5
